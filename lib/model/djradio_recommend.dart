@@ -1,0 +1,30 @@
+// 推荐电台
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
+import 'package:netease_cloud_music/model/dj_radio.dart';
+import 'package:netease_cloud_music/util/http.dart';
+import 'package:netease_cloud_music/config/config.dart';
+
+class DjradioRecommend {
+  List<DjRadio> djRadios;
+
+  DjradioRecommend.fromJson(Map<String, dynamic> json)
+      : djRadios = (json['djRadios'] as List).map((Object item) {
+          return DjRadio.fromJson(item);
+        }).toList();
+}
+
+class DjradioRecommendLogic {
+  static Future<DjradioRecommend> list() async {
+    Response<String> response = await Http.post(Config.djradioRecommendUrl, {
+      'params':
+          '9F54AD9C669858C4791BF1F2A1E9F78DB69BBA8274802CD6D3E1AF887DE743B31053FF3927623B1E80B210C78793E3D4324216E62F7A47A0EF67D504BA12FA6569874A90B5CF38F4231EF0DB671447953BE46EB747F34007AAD8E60D9CBD830F4E7911859C5D68237D1C4E62E3EEC759041E8BBD216394CD331458FC20B72557C2DABEB6FDDDC8AB9DEAD1B749DE63FD90B02FE0DBD1E9D0659106F6D1912F74508527906ABACE3BC14C7983A100DB3DD955F8586E85A8C0B5957DB4DDE56BEE49BD1C20553133405C7419740FD3A73E9CDB42D4E7D9629EC4DB6442B4156059B6255661BF858417FB414AF4857A3A3CDF2D80775180049507D2EF64EE50D903288E970AA22ED66FE10663D2EA5676382E5E4F2983FE74A04E3331EFFC113B3A80BC312B3AF28FF57342F3E46BB70B0B2C7734CA4B340B388D289AD35ED0B1156D64E45E3740927E97A04A84A2DBC8951CB390D862198AB86150D57A92B3233A4E0EF1211BC886C06D9BB030016B4037F064C5AB8A17C7D8910047D487238B6A'
+    });
+    var data = json.decode(response.data);
+    DjradioRecommend djradioRecommend = DjradioRecommend.fromJson(data);
+
+    return djradioRecommend;
+  }
+}
